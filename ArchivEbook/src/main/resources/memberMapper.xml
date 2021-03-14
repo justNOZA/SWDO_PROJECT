@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 회원정보 처리 SQL -->
+<mapper namespace="global.sesoc.archive.dao.MemberMapper">
+
+	<!-- 회원 정보 저장 -->
+	<insert id="insertMember" parameterType="userinfo">
+	insert into 
+		userinfo 
+		(
+			id
+			, password
+			, nickname
+			, name
+			, gender
+			, birthday
+			<if test="email != null and email != ''">
+			, email
+			</if>
+		)
+		values 
+		(
+			#{id}
+			, #{password}
+			, #{nickname}
+			, #{name}
+			, #{gender}
+			, #{birthday}
+			<if test="email != null and email != ''">
+			, #{email}
+			</if>
+		)
+	</insert>
+	
+	<!-- ID로 회원 정보 검색  getMember(login, )-->
+	<select id="getMember" parameterType="string" resultType="userinfo">
+		select 
+			id
+			, nickname
+			, password
+			, name
+			, gender
+			, to_char(birthday, 'yyyy/mm/dd') as birthday
+			, email
+		from 
+			userinfo 
+		where 
+			id = #{id}
+	</select>
+	
+	<!-- 정보 수정 처리 -->
+   <update id="updateinfo" parameterType="userinfo">
+	update 
+		userinfo
+	set
+		gender = #{gender}
+		<if test="password != null and password != ''">
+		, password = #{password}
+		</if>
+		<if test="email != null and email != ''">
+		, email = #{email}
+		</if>
+		<if test="name != null and name != ''">
+		, name = #{name}
+		</if>		
+	where
+		id = #{id}
+   </update>
+   
+   <insert id="setWant" parameterType="buy_user">
+   insert into
+   		buy_user
+   		(
+   		day
+   		, id
+   		, nickname
+   		, want
+   		, booknum
+   		, cardnum
+   		)
+   		values
+   		(
+   		0
+   		, #{id}
+   		, #{nickname}
+   		, 1
+   		, #{booknum}
+   		, -1
+   		)
+   </insert>
+	
+	<select id="checkNick" parameterType="String" resultType="int">
+		select
+			count(*)
+		from
+			userinfo
+		where 
+			nickname = #{id}
+	</select>
+
+	<select id="checkID" parameterType="String" resultType="int">
+		select
+			count(*)
+		from
+			userinfo
+		where 
+			id = #{id}
+	</select>
+	
+	
+	
+	
+	
+	
+	
+</mapper>

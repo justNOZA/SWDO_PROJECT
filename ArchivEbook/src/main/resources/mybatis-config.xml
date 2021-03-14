@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+	<typeAliases>
+		<typeAlias type="global.sesoc.archive.vo.UserinfoVO" alias="userinfo" />
+		<typeAlias type="global.sesoc.archive.vo.Buy_userVO" alias="buy_user" />
+		<typeAlias type="global.sesoc.archive.vo.ReadBookVO" alias="readbook" />
+		<typeAlias type="global.sesoc.archive.vo.CommunityVO" alias="community" />
+		<typeAlias type="global.sesoc.archive.vo.EBookNumVO" alias="ebooknum" /> 
+		<typeAlias type="global.sesoc.archive.vo.Group_userVO" alias="group_user" /> 
+		<typeAlias type="global.sesoc.archive.vo.GroupBoardVO" alias="groupboard" /> 
+		<typeAlias type="global.sesoc.archive.vo.GroupReplyVO" alias="groupreply" />
+		<typeAlias type="global.sesoc.archive.vo.Reply_BookVO" alias="reply_book" />
+		<typeAlias type="global.sesoc.archive.vo.SearchListVO" alias="searchlist" />
+		<typeAlias type="global.sesoc.archive.vo.Used_DataVO" alias="used_data" />
+	</typeAliases>
+	
+	<mappers>
+		<mapper resource="memberMapper.xml" />
+		<mapper resource="readerMapper.xml" />
+		<mapper resource="groupMapper.xml" />
+		<mapper resource="replyMapper.xml" />
+		<mapper resource="payMapper.xml" />
+		<mapper resource="recommendMapper.xml" />
+		<mapper resource="ebookMapper.xml" />
+		<mapper resource="interceptorMapper.xml" />
+	</mappers>
+</configuration>

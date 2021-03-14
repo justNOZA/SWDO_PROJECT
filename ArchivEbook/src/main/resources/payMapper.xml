@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="global.sesoc.archive.dao.PayMapper">
+	<insert id="setBuy_user" parameterType="map">
+		insert into
+			buy_user
+			(
+				day
+				, id
+				, nickname
+				, booknum
+				, cardnum
+			)
+			values
+			(
+				#{day}
+				, #{id}
+				, #{nickname}
+				, #{booknum}
+				, #{card}
+			)
+	</insert>
+	<insert id="setUsed_data" parameterType="map">
+		insert into
+				used_data
+				(
+					id
+					, nickname
+					, search
+					, buy
+				)
+				values
+				(
+					#{id}
+					, #{nickname}
+					, #{title}
+					, #{booknum}
+				)
+	</insert>
+	<insert id="setReadBook" parameterType="map">
+		insert into
+				readbook
+				(
+					id
+					, nickname
+					, booknum
+				)
+				values
+				(
+					#{id}
+					, #{nickname}
+					, #{booknum}
+				)
+	</insert>
+	<select id="getWantBook" parameterType="map" resultType="buy_user">
+		select
+			*
+		from
+			buy_user
+		where
+			booknum = #{booknum}
+			and
+			id = #{id}
+	</select>
+	<update id="updateWant" parameterType="map">
+		update
+			buy_user
+		set
+			day = #{day}
+			, want = 0
+			, inputdate = sysdate
+			, cardnum = #{card}
+		where
+			booknum = #{booknum}
+			and
+			id = #{id}
+	</update>
+	<update id="updateReadbook" parameterType="map">
+		update
+			readbook
+		set
+			inputdate = sysdate
+		where
+			id = #{id}
+			and
+			booknum = #{booknum}
+	</update>
+	<update id="updateBook" parameterType="map">
+		update
+			buy_user
+		set
+			day = day + #{day}
+		where
+			id = #{id}
+			and
+			booknum = #{booknum}
+	</update>
+	<update id="updatePastBook" parameterType="map">
+		update
+			buy_user
+		set
+			day = day + #{day}
+			, inputdate = sysdate
+		where
+			id = #{id}
+			and
+			booknum = #{booknum}
+	</update>
+</mapper>

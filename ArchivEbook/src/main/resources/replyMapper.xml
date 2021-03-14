@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="global.sesoc.archive.dao.ReplyMapper">
+
+	<insert id="setReply" parameterType="reply_book">
+	insert into
+		reply_book
+			(
+				title
+				, replynum
+				, id
+				, nickname
+				, point
+				, content
+				, publisher
+			)
+		values
+			(
+				#{title}
+				, reply_book_seq.nextval
+				, #{id}
+				, #{nickname}
+				, #{point}
+				, #{content}
+				, #{publisher}
+			)
+	</insert>
+	
+	<select id="getEbookList" parameterType="string" resultType="searchlist">
+	select 
+		*
+	from
+		Ebooknum
+	where
+		title like '%'||#{string}||'%'
+		or
+		title2 like '%'||#{string}||'%'
+	</select>
+	
+	<select id="getReply" parameterType="reply_book" resultType="reply_book">
+	select
+		*
+	from
+		reply_book
+	where
+		title = #{title}
+		and
+		publisher = #{publisher}
+	order by
+		replynum desc
+	</select>
+	
+	<select id="totalPoint" parameterType="reply_book" resultType="string">
+		select
+			round(avg(point),2) as point
+		from
+			reply_book
+		where
+			title = #{title}
+			and
+			publisher = #{publisher}
+	</select>
+	
+	<select id="getMyList" parameterType="String" resultType="reply_book">
+		select
+			title
+			, content
+			, point
+			, to_char(inputdate, 'yy/mm/dd') as inputdate
+			, publisher
+		from
+			reply_book
+		where
+			id = #{id}
+		order by
+			replynum desc
+	</select>
+	
+	<select id="getMyTotal" parameterType="String" resultType="int">
+		select
+			count(*)
+		from
+			reply_book
+		where
+			id = #{id}
+	</select>
+</mapper>

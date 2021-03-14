@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="global.sesoc.archive.dao.RecommendMapper">
+	<select id="getHistory" parameterType="string" resultType="ebooknum">
+	select
+		distinct
+    	e.booknum
+    	, e.title
+	from 
+		ebooknum e
+		, used_data ud
+	where
+		e.BOOKNUM = ud.buy
+		and
+		ud.id = #{id}
+	</select>
+	<select id="RecommendBook" parameterType="string" resultType="ebooknum">
+	select
+		*
+	from
+		ebooknum eb99
+		,
+		(
+		select
+			count(*) as cc
+			, c.title
+		from
+			(
+			select 
+				ud3.buy
+				, eb2.title
+			from 
+				used_data ud3
+				, 
+				(
+				select 
+					distinct 
+					ud2.ID 
+				from 
+					used_data ud2
+					, 
+					(
+					select 
+						distinct 
+						eb.booknum 
+					from 
+						ebooknum eb
+						, used_data ud 
+					where 
+						eb.booknum = ud.buy 
+						and 
+						id = #{id}
+					) bo
+					, userinfo info
+				where 
+					ud2.buy = bo.booknum 
+					and 
+					ud2.id != #{id}
+					and
+					ud2.id = info.id
+					and
+					info.GENDER = (select gender from userinfo where id = #{id})
+					and
+					to_char(info.birthday, 'yyyy') between (select to_char(birthday,'yyyy')from userinfo where id = #{id})-5 and (select to_char(birthday,'yyyy')from userinfo where id = #{id})+5
+				) bo2
+				, EBOOKNUM eb2
+			where 
+				ud3.id = bo2.id
+				and
+				ud3.buy = eb2.booknum
+			) c
+		group by c.title
+	    ) d
+	where
+		d.title = eb99.title
+		order by d.cc desc
+	</select>
+	<select id="RecommendBookGender" parameterType="string" resultType="ebooknum">
+	select
+		*
+	from
+		ebooknum eb99
+		,
+		(
+		select
+			count(*) as cc
+			, c.title
+		from
+			(
+			select 
+				ud3.buy
+				, eb2.title
+			from 
+				used_data ud3
+				, 
+				(
+				select 
+					distinct 
+					ud2.ID 
+				from 
+					used_data ud2
+					, 
+					(
+					select 
+						distinct 
+						eb.booknum 
+					from 
+						ebooknum eb
+						, used_data ud 
+					where 
+						eb.booknum = ud.buy 
+						and 
+						id = #{id}
+					) bo
+					, userinfo info
+				where 
+					ud2.buy = bo.booknum 
+					and 
+					ud2.id != #{id}
+					and
+					ud2.id = info.id
+					and
+					info.GENDER = (select gender from userinfo where id = #{id})
+				) bo2
+				, EBOOKNUM eb2
+			where 
+				ud3.id = bo2.id
+				and
+				ud3.buy = eb2.booknum
+			) c
+		group by c.title
+	    ) d
+	where
+		d.title = eb99.title
+		order by d.cc desc
+	</select>
+	<select id="RecommendBookAge" parameterType="string" resultType="ebooknum">
+	select
+		*
+	from
+		ebooknum eb99
+		,
+		(
+		select
+			count(*) as cc
+			, c.title
+		from
+			(
+			select 
+				ud3.buy
+				, eb2.title
+			from 
+				used_data ud3
+				, 
+				(
+				select 
+					distinct 
+					ud2.ID 
+				from 
+					used_data ud2
+					, 
+					(
+					select 
+						distinct 
+						eb.booknum 
+					from 
+						ebooknum eb
+						, used_data ud 
+					where 
+						eb.booknum = ud.buy 
+						and 
+						id = #{id}
+					) bo
+					, userinfo info
+				where 
+					ud2.buy = bo.booknum 
+					and 
+					ud2.id != #{id}
+					and
+					ud2.id = info.id
+					and
+					to_char(info.birthday, 'yyyy') between (select to_char(birthday,'yyyy')from userinfo where id = #{id})-10 and (select to_char(birthday,'yyyy')from userinfo where id = #{id})+10
+				) bo2
+				, EBOOKNUM eb2
+			where 
+				ud3.id = bo2.id
+				and
+				ud3.buy = eb2.booknum
+			) c
+		group by c.title
+	    ) d
+	where
+		d.title = eb99.title
+		order by d.cc desc
+	</select>
+	<select id="RecommendBookNothing" parameterType="string" resultType="ebooknum">
+	select
+		*
+	from
+		ebooknum eb99
+		,
+		(
+		select
+			count(*) as cc
+			, c.title
+		from
+			(
+			select 
+				ud3.buy
+				, eb2.title
+			from 
+				used_data ud3
+				, 
+				(
+				select 
+					distinct 
+					ud2.ID 
+				from 
+					used_data ud2
+					, 
+					(
+					select 
+						distinct 
+						eb.booknum 
+					from 
+						ebooknum eb
+						, used_data ud 
+					where 
+						eb.booknum = ud.buy 
+						and 
+						id = #{id}
+					) bo
+				where 
+					ud2.buy = bo.booknum 
+					and 
+					ud2.id != #{id}
+				) bo2
+				, EBOOKNUM eb2
+			where 
+				ud3.id = bo2.id
+				and
+				ud3.buy = eb2.booknum
+			) c
+		group by c.title
+	    ) d
+	where
+		d.title = eb99.title
+		order by d.cc desc
+	</select>
+	<select id="RecommendNoId" resultType="ebooknum">
+	select 
+		eb.booknum
+		, eb.title
+		, eb.author
+		, eb.publisher
+	from
+		ebooknum eb
+		, (select count(*) as c, buy from used_data b group by buy) t
+	where
+		eb.booknum = t.buy
+	order by
+		t.c desc
+	</select>
+</mapper>

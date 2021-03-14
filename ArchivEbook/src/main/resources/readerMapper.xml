@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="global.sesoc.archive.dao.ReaderMapper">
+
+	<select id="getLibrary" parameterType="string" resultType="buy_user">
+	select 
+		bu.day
+		, to_char(bu.inputdate,'yyyy-mm-dd-hh24-mi-ss') as inputdate
+		, bu.id
+		, bu.nickname
+		, bu.booknum
+		, eb.title
+		, eb.author
+	 from
+	 	buy_user bu
+	 	, readbook rb
+	 	, ebooknum eb
+	 where
+	 	bu.id = #{id}
+	 	and 
+	 	bu.id = rb.id
+        and
+        bu.booknum = rb.booknum 
+        and
+        bu.booknum = eb.booknum
+	</select>
+	
+	<select id="getWant" parameterType="string" resultType="buy_user">
+	select
+		bu.id
+		, bu.nickname
+		, bu.booknum
+		, bu.want
+        , eb.title
+        , eb.author
+	from
+		buy_user bu
+        , ebooknum eb
+	where
+		id = #{id}
+        and
+        bu.booknum = eb.booknum
+        and
+        bu.want = 1
+	</select>
+	
+	<select id="getBook" parameterType="int" resultType="ebooknum">
+	select
+		*
+	from
+		ebooknum
+	where
+		booknum = #{num}
+	</select>
+	
+	<select id="getPrevious" parameterType="readbook" resultType="readbook">
+	select
+		*
+	from
+		readbook
+	where
+		id = #{id}
+		and
+		booknum = #{booknum}
+	</select>
+	
+	<update id="saveInformation" parameterType="readbook">
+	update
+		readbook
+	set
+		storage = #{storage}
+	where
+		id = #{id}
+		and
+		booknum = #{booknum}
+	</update>
+	
+	<update id="deletePreviou" parameterType="readbook">
+	update
+		readbook
+	set
+		storage = #{storage}
+	where
+		id = #{id}
+		and
+		booknum = #{booknum}
+	</update>
+</mapper>
